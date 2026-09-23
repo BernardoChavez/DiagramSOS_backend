@@ -1,0 +1,13 @@
+{% for table in tables %}
+CREATE TABLE {{ table.table_name }} (
+{% for col in table.columns %}
+    {{ col.name }} {{ col.sql_type }}{% if col.is_primary %} PRIMARY KEY{% if col.sql_type == 'INTEGER' %} AUTO_INCREMENT{% endif %}{% endif %}{% if not loop.last %},{% endif %}
+{% endfor %}
+);
+{% endfor %}
+
+{% for table in tables %}
+{% for fk in table.fks %}
+ALTER TABLE {{ table.table_name }} ADD FOREIGN KEY ({{ fk.column }}) REFERENCES {{ fk.target_table }}({{ fk.target_column }});
+{% endfor %}
+{% endfor %}

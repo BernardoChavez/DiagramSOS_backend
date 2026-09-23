@@ -1,0 +1,40 @@
+# Documentación de la API (Generada Automáticamente)
+
+Esta API fue generada por el diseñador de bases de datos. A continuación se listan todas las rutas disponibles para interactuar con tus tablas.
+
+Servidor base: `http://localhost:8080`
+
+{% for table in tables %}
+## Tabla: {{ table.table_name }}
+Controlador: `{{ table.class_name }}Controller`
+Ruta base: `/api/{{ table.table_name|lower }}`
+
+### Obtener todos los registros (GET)
+```http
+GET /api/{{ table.table_name|lower }}
+```
+
+### Crear un nuevo registro (POST)
+```http
+POST /api/{{ table.table_name|lower }}
+Content-Type: application/json
+
+{
+{% for col in table.columns %}
+  "{{ col.camel_name }}": {% if col.java_type == 'String' %}"valor_{{ col.name }}"{% elif col.java_type == 'Integer' %}1{% elif col.java_type == 'Boolean' %}true{% else %}"2026-10-15"{% endif %}{% if not loop.last %},{% endif %}
+{% endfor %}
+}
+```
+
+### Obtener un registro por ID (GET)
+```http
+GET /api/{{ table.table_name|lower }}/{id}
+```
+
+### Eliminar un registro (DELETE)
+```http
+DELETE /api/{{ table.table_name|lower }}/{id}
+```
+
+---
+{% endfor %}

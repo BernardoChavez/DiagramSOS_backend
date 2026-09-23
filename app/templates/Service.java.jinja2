@@ -1,0 +1,32 @@
+﻿package com.dbdesigner.service;
+
+import com.dbdesigner.model.{{ class_name }};
+import com.dbdesigner.repository.{{ class_name }}Repository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+
+@Service
+public class {{ class_name }}Service {
+
+    @Autowired
+    private {{ class_name }}Repository repository;
+
+    public List<{{ class_name }}> findAll() {
+        return repository.findAll();
+    }
+
+    public Optional<{{ class_name }}> findById(Integer id) {
+        return repository.findById(id);
+    }
+
+    public {{ class_name }} save({{ class_name }} entity) {
+        return repository.save(entity);
+    }
+
+    public void deleteById(Integer id) {
+        repository.deleteById(id);
+    }
+}

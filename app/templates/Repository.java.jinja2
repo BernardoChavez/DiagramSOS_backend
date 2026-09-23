@@ -1,0 +1,14 @@
+﻿package com.dbdesigner.repository;
+
+import com.dbdesigner.model.{{ class_name }};
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface {{ class_name }}Repository extends JpaRepository<{{ class_name }}, Integer> {
+
+{% for proc in custom_procedures %}
+    // {{ proc.description }}
+    {{ proc.return_type }} {{ proc.method_name }}({{ proc.params }});
+{% endfor %}
+}

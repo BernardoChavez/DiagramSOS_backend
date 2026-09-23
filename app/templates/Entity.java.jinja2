@@ -1,0 +1,33 @@
+﻿package com.dbdesigner.model;
+
+import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import java.util.List;
+
+@Entity
+@Table(name = "{{ table_name }}")
+@Data
+@NoArgsConstructor
+public class {{ class_name }} {
+
+{% for col in columns %}
+{% if col.is_primary %}
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+{% endif %}
+{% if col.is_fk %}
+    @ManyToOne
+    @JoinColumn(name = "{{ col.name }}")
+    private {{ col.fk_class }} {{ col.camel_name }};
+{% else %}
+    @Column(name = "{{ col.name }}")
+    private {{ col.java_type }} {{ col.camel_name }};
+{% endif %}
+{% endfor %}
+
+{% for rel in one_to_many %}
+    @OneToMany(mappedBy = "{{ rel.mapped_by }}")
+    private List<{{ rel.target_class }}> {{ rel.field_name }};
+{% endfor %}
+}
