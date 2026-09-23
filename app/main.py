@@ -3,6 +3,13 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
 from app.api.routes import router as api_router
 
+from app.database.session import engine
+from app.database.base import Base
+import app.models # Para que SQLAlchemy registre las tablas
+
+# Generar las tablas de la base de datos si no existen
+Base.metadata.create_all(bind=engine)
+
 app = FastAPI(
     title=settings.PROJECT_NAME,
     description="Backend para Sistema Colaborativo de Diseño de Bases de Datos",
