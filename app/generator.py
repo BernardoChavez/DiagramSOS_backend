@@ -63,7 +63,7 @@ def generate_project_zip(diagram_data: dict) -> io.BytesIO:
                 java_type = sql_to_java_type(col['type'])
                 camel_name = to_camel_case(col['name'])
                 if col.get('isPrimary'):
-                    pk_camel = camel_name.capitalize()
+                    pk_camel = camel_name[0].upper() + camel_name[1:]
                     
                 # Basic FK detection (ends with _id or is related via edges)
                 is_fk = col['name'].endswith('_id') and not col.get('isPrimary')
