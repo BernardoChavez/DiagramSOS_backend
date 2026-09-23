@@ -31,4 +31,13 @@ class Settings(BaseSettings):
         env_file = ".env"
         extra = "ignore"
 
+
+    @property
+    def get_database_url(self) -> str:
+        if self.DATABASE_URL.startswith("postgres://"):
+            return self.DATABASE_URL.replace("postgres://", "postgresql://", 1)
+        return self.DATABASE_URL
+
 settings = Settings()
+# Override with the fixed URL
+settings.DATABASE_URL = settings.get_database_url
