@@ -1,20 +1,36 @@
 # Documentación de la API (Generada Automáticamente)
 
-Esta API fue generada por el diseñador de bases de datos. A continuación se listan todas las rutas disponibles para interactuar con tus tablas.
+Esta API fue generada por el diseñador de bases de datos. A continuación se listan todas las rutas CRUD disponibles para interactuar con tus tablas, junto con instrucciones de cómo probarlas en Postman.
 
 Servidor base: `http://localhost:8080`
 
 {% for table in tables %}
 ## Tabla: {{ table.table_name }}
-Controlador: `{{ table.class_name }}Controller`
+Controlador: `{{ class_name }}Controller`
 Ruta base: `/api/{{ table.table_name|lower }}`
 
-### Obtener todos los registros (GET)
+---
+
+### 1. Obtener todos los registros (GET)
+Trae una lista completa con todos los datos guardados en esta tabla.
+* **En Postman:** Selecciona el método `GET`, pega la URL y presiona **Send**.
+
 ```http
 GET /api/{{ table.table_name|lower }}
 ```
 
-### Crear un nuevo registro (POST)
+### 2. Obtener un registro por ID (GET)
+Trae un solo registro específico basándose en su ID.
+* **En Postman:** Selecciona el método `GET`, pega la URL cambiando `{id}` por el ID real (ej. `/api/{{ table.table_name|lower }}/1`) y presiona **Send**.
+
+```http
+GET /api/{{ table.table_name|lower }}/{id}
+```
+
+### 3. Crear un nuevo registro (POST)
+Inserta un nuevo registro en la tabla.
+* **En Postman:** Selecciona el método `POST`, ve a la pestaña **Body**, selecciona **raw** y **JSON**, pega el bloque de abajo, modifícalo con tus datos reales y presiona **Send**.
+
 ```http
 POST /api/{{ table.table_name|lower }}
 Content-Type: application/json
@@ -26,15 +42,28 @@ Content-Type: application/json
 }
 ```
 
-### Obtener un registro por ID (GET)
+### 4. Actualizar un registro existente (PUT)
+Reemplaza los datos de un registro existente basándose en su ID.
+* **En Postman:** Selecciona el método `PUT`, cambia `{id}` en la URL por el ID a editar, pega el bloque de abajo en el **Body** (igual que en POST), pon los datos nuevos y presiona **Send**.
+
 ```http
-GET /api/{{ table.table_name|lower }}/{id}
+PUT /api/{{ table.table_name|lower }}/{id}
+Content-Type: application/json
+
+{
+{% for col in table.columns %}
+  "{{ col.camel_name }}": {% if col.java_type == 'String' %}"nuevo_valor_{{ col.name }}"{% elif col.java_type == 'Integer' %}2{% elif col.java_type == 'Boolean' %}false{% else %}"2026-12-31"{% endif %}{% if not loop.last %},{% endif %}
+{% endfor %}
+}
 ```
 
-### Eliminar un registro (DELETE)
+### 5. Eliminar un registro (DELETE)
+Borra permanentemente un registro de la base de datos.
+* **En Postman:** Selecciona el método `DELETE`, cambia `{id}` en la URL por el ID que quieres borrar y presiona **Send**.
+
 ```http
 DELETE /api/{{ table.table_name|lower }}/{id}
 ```
 
----
+<br><br>
 {% endfor %}
